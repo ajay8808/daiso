@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiso.vo.ReviewVO">
+
+
+	<insert id="ReviewInsert" useGeneratedKeys="true" keyProperty="r_num"  parameterType="reviewVO">
+		insert into review(r_num, r_comment , r_date ,b_num, m_userid) 
+			values( #{r_num} , #{r_comment }, now(), #{b_num}, #{m_userid})
+	</insert>
+
+ 	 <select id="replySelectAll" resultType="reviewVO" >
+      SELECT r_num, m_userid, r_comment, r_date, b_num 
+      FROM review
+      WHERE b_num=#{b_num};
+   </select> 
+
+	<!-- <select id="replySelectOne" resultType="ReviewVO"  > 
+		SELECT r_num, r_comment,  r_date ,b_num, m_userid FROM REVIEW WHERE b_num=#{b_num}
+	 </select>  -->
+	
+	<!-- <update id="boardUpdate"    > 
+	UPDATE board SET b_title=#{b_title}, b_writing=#{b_writing} , b_date = now() , m_userid=#{m_userid} , p_productid= #{p_productid} WHERE b_num=#{b_num}
+	 </update>-->
+	
+	<delete id="delReview" >
+	 DELETE FROM review WHERE r_num=#{r_num}
+	  </delete>	 
+	  
+	  
+	<delete id="delAllReview" >
+	 DELETE FROM review WHERE b_num=#{b_num}
+	  </delete>	
+</mapper>
+
+
+

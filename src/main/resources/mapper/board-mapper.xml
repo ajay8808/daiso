@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiso.vo.BoardVO">
+
+
+	<insert id="boardInsert" useGeneratedKeys="true" keyProperty="b_num"  parameterType="boardVO">
+		insert into board(b_num, b_title, b_writing, b_date,m_userid, p_productid ) 
+			values( #{b_num} , #{b_title}, #{b_writing}, now(), #{m_userid},  #{p_productid})
+	</insert>
+<!-- 	   select 안에 resultMap="result" 넣으면 날짜 영어로 
+	 <select id="selectAll"  resultType="hashmap"> result type 은 쿼리 결과를 받음  접두사 result 로 들어오는 게  반환 값이 맵형식 
+		SELECT * FROM board
+	</select>  -->
+	
+ <select id="selectAll" resultType="hashmap" >
+      SELECT b_num, b_title, b_writing, b_date, m_userid, board.p_productid, p_img , p_price
+      FROM board, product
+      WHERE board.p_productid = product.p_productid;
+   </select>
+
+
+ 
+ <resultMap type="boardVO" id="result">
+      <result property="b_num" javaType="java.lang.Integer"
+         column="b_num" jdbcType="INTEGER" />
+      <result property="b_title" javaType="java.lang.String"
+         column="b_title" jdbcType="VARCHAR" />
+      <result property="b_writing" javaType="java.lang.String"
+         column="b_writing" jdbcType="VARCHAR" />
+      <result property="b_date" javaType="java.util.Date"
+         column="b_date" jdbcType="DATE" />
+      <result property="m_userid" javaType="java.lang.String"
+         column="m_userid" jdbcType="VARCHAR" />
+      <result property="p_productid" javaType="java.lang.Integer"
+         column="board.p_productid" jdbcType="INTEGER" />         
+      <result property="com.daiso.vo.ProductVO.p_img" javaType="java.lang.String"
+         column="p_img" jdbcType="VARCHAR" /> 
+      <result property="com.daiso.vo.ProductVO.p_price" javaType="java.lang.Integer"
+         column="p_price" jdbcType="INTEGER" />             
+   </resultMap> 
+
+	
+	<select id="boardSelectOne" resultType="hashmap"  > 
+		SELECT b_num, b_title, b_writing, b_date, m_userid, board.p_productid, p_img , p_price FROM board, product WHERE board.p_productid = product.p_productid AND b_num=#{b_num}
+	 </select>
+	
+
+	<update id="boardUpdate"    > 
+	UPDATE board SET b_title=#{b_title}, b_writing=#{b_writing} , b_date = now() , m_userid=#{m_userid} , p_productid= #{p_productid} WHERE b_num=#{b_num}
+	 </update>
+	
+	
+	<delete id="boardDel" >
+	 DELETE FROM board WHERE b_num=#{b_num}
+	  </delete>
+	<!-- <select id="boardPrev" >
+	SELECT b_num FROM board
+      WHERE b_num =  (SELECT MAX(b_num) FROM BOARD where b_num <100
+      );
+      </select> -->
+</mapper>
+
+
+
+<!-- <result property="p_name" javaType="java.lang.String" 
+				column="p_name" jdbcType="VARCHAR"/>
+		<result property="p_price" javaType="java.lang.Integer" 
+				column="p_price" jdbcType="INTEGER"/>
+		<result property="p_img" javaType="java.lang.String" 
+				column="p_img" jdbcType="java.lang.String"/> -->
+
+
+

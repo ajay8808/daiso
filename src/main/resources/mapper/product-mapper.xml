@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daiso.vo.ProductVO">
+
+
+	<select id="selectString" resultType="ProductVO">
+	SELECT p_productid FROM product WHERE p_img=#{name}
+  
+    </select>
+	
+
+	<select id="selectRead" resultType="hashmap"> 
+	SELECT * FROM product WHERE p_productid=#{p_productid}
+	 </select>
+
+	<select id="selectSrc" resultType="productVO">
+		SELECT p_img FROM product WHERE p_productid=#{p_productid}
+	
+	</select>
+
+	
+</mapper>
+
+
+
+
+
+
+
