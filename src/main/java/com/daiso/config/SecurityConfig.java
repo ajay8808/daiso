@@ -39,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.logout().logoutUrl("/logout").invalidateHttpSession(true).logoutSuccessUrl("/");
 		http.csrf().ignoringAntMatchers("/board/**").and();
 		http.csrf().ignoringAntMatchers("/reply/**").and(); 
+		//http.csrf().ignoringAntMatchers("/boarddetail/**").and();
+		//http.csrf().ignoringAntMatchers("/boardupdate/**").and(); 
 		http.userDetailsService((UserDetailsService) memberService);
 		
 	}

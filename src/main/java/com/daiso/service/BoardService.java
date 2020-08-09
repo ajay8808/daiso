@@ -10,5 +10,5 @@ public interface BoardService {
 	void selectAllBoards(Map map);
 	void updateBoard(BoardVO board);
 	void deleteBoard(int b_num);
-
+	int prevnext(int num);
 }

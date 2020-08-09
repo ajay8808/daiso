@@ -43,4 +43,10 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
+	@Override
+	public int prevnext(int num) {
+		return this.boardDao.prevnext(num);
+		
+	}
+
 }

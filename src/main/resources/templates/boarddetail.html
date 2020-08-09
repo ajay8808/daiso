@@ -89,10 +89,6 @@ function listReply(b_num){
 		 
 		listReply(b_num);
 		
-		
-		
-		
-		
 	 /*    function listReply(b_num){
 	         $.ajax({
 	            url : '/reply/' + b_num,
@@ -166,12 +162,12 @@ function listReply(b_num){
 			});
 		});
 		 $("#next").bind("click", function() {
-			 var next =parseInt(b_num)+1;
+			
 			  window.location.href ='/board/'+next;
 	      }); 
 		 $("#prev").bind("click", function() {
 			 var prev =parseInt(b_num)-1;
-			  window.location.href ='/board/'+prev;
+			  window.location.href ='/board/'+b_num;
 	      }); 
 		
 	 	 $("#updateBtn").bind("click", function() {

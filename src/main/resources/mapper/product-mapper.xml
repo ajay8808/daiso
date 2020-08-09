@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.daiso.vo.ProductVO">
 
 
-	<select id="selectString" resultType="ProductVO">
+	<select id="selectString" resultType="productVO">
 	SELECT p_productid FROM product WHERE p_img=#{name}
   
     </select>

@@ -20,9 +20,10 @@ public class BoardDaoImpl implements BoardDao {
 	BoardMapper boardMapper;
 	@Override
 	public void create(BoardVO board) {
-	this.sqlSession.insert("boardInsert" ,board);
+	//this.sqlSession.insert("boardInsert" ,board);
+		boardMapper.insertBoard(board);
 	}
-
+	
 	@Override
 	public void read (Map map) {
 //		List<Object> list = this.sqlSession.selectList("boardSelectOne", map );
@@ -53,6 +54,12 @@ public class BoardDaoImpl implements BoardDao {
 	public void delete(int b_num) {
 		this.sqlSession.delete("boardDel", b_num);
 
+	}
+
+	@Override
+	public int prevnext(int num) {
+		// TODO Auto-generated method stub
+		return boardMapper.prevnext(num);
 	}
 
 

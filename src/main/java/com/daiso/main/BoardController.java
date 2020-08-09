@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,9 +61,13 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("b_num", b_num);
 		this.boardService.selectBoard(map);
+		
 		// log.info("b_num"+b_num);
 		Map<String, Object> mapping = (Map<String, Object>) map.get("selectResult");
 		model.addAttribute("board", mapping);
+		
+		this.boardService.prevnext(b_num);
+		
 		return "boarddetail";
 	}
 
@@ -81,43 +86,47 @@ public class BoardController {
 //		return map;	
 //	}
 
-	@RequestMapping(value = "/boarddetail", method = RequestMethod.GET)
-	public String getboardDt() throws Exception {
-		return "boarddetail"; // 2 boarddetail.html 페이지로 감
-	}
+//	@RequestMapping(value = "/boarddetail", method = RequestMethod.GET)
+//	public String getboardDt() throws Exception {
+//		return "boarddetail"; // 2 boarddetail.html 페이지로 감
+//	}
 
 	@RequestMapping(value = "/boardWrite", method = RequestMethod.GET)
 	public String getboardWt() throws Exception {
-		return "boardWrite";
+		return "boardwt";
 	}
-
-	@RequestMapping(value = "/board", method = RequestMethod.POST)
-	@ResponseBody
-	public Map insert(@RequestBody BoardVO board) {
-		this.boardService.insertBoard(board);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", "success");
-		return map;
+	@PostMapping("/write")
+	public String writeprocess(HttpServletRequest http) {
+		BoardVO vo = new BoardVO();
+		//logger.info("디버그 = " + http.getUserPrincipal().getName());
+		vo.setM_userid(http.getUserPrincipal().getName());
+		vo.setB_title((String) http.getParameter("title"));
+		vo.setB_writing((String) http.getParameter("content"));
+		//logger.info((String) http.getParameter("image"));
+		vo.setP_productid(productService.selectProductId((String) http.getParameter("image")));
+		boardService.insertBoard(vo);
+		return "redirect:/board";
 	}
-
+	
+//ajax 활용한 글쓰기 구버전
+//	@RequestMapping(value = "/board", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map insert(@RequestBody BoardVO board) {
+//		this.boardService.insertBoard(board);
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("code", "success");
+//		return map;
+//	}
+ 
 	// 글 삭제
 	@GetMapping("/delete/{b_num}")
 	public String boardDelete(@PathVariable("b_num") int b_num) {
 		this.boardService.deleteBoard(b_num);
-		Map<String, Object> map = new HashMap<String, Object>(); 
-		map.put("code", "success");
+		
 		return "redirect:/board";
 	}
 
-//	@PutMapping("/update/{b_num}") // 글 업데이트
-//	public Map boardUpdate(@PathVariable int b_num) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("b_num", b_num);
-//		this.boardService.selectBoard(map);
-//		Map<String, Object> mapping = (Map<String, Object>) map.get("boardResult");
-//		map.put("boardResult", mapping);
-//		return map;
-//	}
+
 //	@PutMapping("/member")
 //	public Map<String, Object> update(@RequestBody MemberVO member) {
 //		Map<String, Object> map = new HashMap<String, Object>();
@@ -128,14 +137,38 @@ public class BoardController {
 //		map.put("memberResult", member);
 //		return map;
 //	}
+	
+	//구버전 글수정
+//	@GetMapping("/update/{b_num}")
+//	public String boardupdate(@PathVariable int b_num,Model model) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("b_num", b_num);
+//		this.boardService.selectBoard(map);
+//		Map<String, Object> mapping = (Map<String, Object>) map.get("selectResult");
+//		model.addAttribute("board", mapping);
+//		return "boardupdate";
+//	}
 	@GetMapping("/update/{b_num}")
 	public String boardupdate(@PathVariable int b_num,Model model) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("b_num", b_num);
+//		List<BoardVO> list = this.boardService.selectBoard();
+//		BoardVO board = list.get(0);
+//		ProductVO product = productService.selectProduct(list.get(0).getP_productid());
+//		model.addAttribute("board",board);
+//		model.addAttribute("product",product);
+//		return "boardupdate";
+//		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("b_num", b_num);
 		this.boardService.selectBoard(map);
 		Map<String, Object> mapping = (Map<String, Object>) map.get("selectResult");
+		
 		model.addAttribute("board", mapping);
+		
 		return "boardupdate";
+		
+		
 	}
 	
 	@PutMapping("/boarddetail")
@@ -146,15 +179,15 @@ public class BoardController {
 		log.info(http.getParameter("title"));
 		log.info(http.getParameter("content"));
 		log.info(http.getParameter("num"));
-		log.info(http.getParameter("productid"));
+		//log.info(http.getParameter("productid"));
 		vo.setM_userid((String)http.getParameter("id")); //id 가 오브젝트 객체라 스트링형변환
 		vo.setB_title((String) http.getParameter("title"));
 		vo.setB_writing((String) http.getParameter("content"));
-		/* vo.setP_productid(http.getParameter("product")); */
+		vo.setP_productid(productService.selectProductId((String) http.getParameter("image")));
 		int num = Integer.parseInt((String)http.getParameter("num"));
 		vo.setB_num(num);
-		int productid = Integer.parseInt((String)http.getParameter("productid"));
-		vo.setP_productid(productid);
+		//int productid = Integer.parseInt((String)http.getParameter("productid"));
+		//vo.setP_productid(productid);
 		boardService.updateBoard(vo);
 		return "redirect:/board";
 	}
