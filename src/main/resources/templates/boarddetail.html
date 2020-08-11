@@ -162,12 +162,12 @@ function listReply(b_num){
 			});
 		});
 		 $("#next").bind("click", function() {
-			
+			 var next =parseInt(b_num)+1;
 			  window.location.href ='/board/'+next;
 	      }); 
 		 $("#prev").bind("click", function() {
 			 var prev =parseInt(b_num)-1;
-			  window.location.href ='/board/'+b_num;
+			  window.location.href ='/board/'+prev;
 	      }); 
 		
 	 	 $("#updateBtn").bind("click", function() {

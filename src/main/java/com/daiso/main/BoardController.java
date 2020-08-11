@@ -66,7 +66,7 @@ public class BoardController {
 		Map<String, Object> mapping = (Map<String, Object>) map.get("selectResult");
 		model.addAttribute("board", mapping);
 		
-		this.boardService.prevnext(b_num);
+		//this.boardService.prevnext(b_num);
 		
 		return "boarddetail";
 	}
